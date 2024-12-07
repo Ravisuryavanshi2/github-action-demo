@@ -36,42 +36,42 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
 
     steps:
-    # Checkout the repository
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    # Set up Terraform
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.5.0
+      # Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
 
-    # Set up AWS credentials (using secrets)
-    - name: Set up AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws_region: ${{ github.event.inputs.region }}
+      # Set up AWS credentials (using secrets)
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ github.event.inputs.region }}
 
-    # Initialize Terraform
-    - name: Terraform Init
-      run: terraform init
+      # Initialize Terraform
+      - name: Terraform Init
+        run: terraform init
 
-    # Run Terraform Plan with dynamic inputs
-    - name: Terraform Plan
-      run: terraform plan
-      env:
-        TF_VAR_vpc_id: ${{ github.event.inputs.vpc_id }}
-        TF_VAR_s3_bucket_name: ${{ github.event.inputs.s3_bucket_name }}
-        TF_VAR_instance_type: ${{ github.event.inputs.instance_type }}
-        TF_VAR_region: ${{ github.event.inputs.region }}
+      # Run Terraform Plan with dynamic inputs
+      - name: Terraform Plan
+        run: terraform plan
+        env:
+          TF_VAR_vpc_id: ${{ github.event.inputs.vpc_id }}
+          TF_VAR_s3_bucket_name: ${{ github.event.inputs.s3_bucket_name }}
+          TF_VAR_instance_type: ${{ github.event.inputs.instance_type }}
+          TF_VAR_region: ${{ github.event.inputs.region }}
 
-    # Apply Terraform changes (auto-approve)
-    - name: Terraform Apply
-      run: terraform apply -auto-approve
-      env:
-        TF_VAR_vpc_id: ${{ github.event.inputs.vpc_id }}
-        TF_VAR_s3_bucket_name: ${{ github.event.inputs.s3_bucket_name }}
-        TF_VAR_instance_type: ${{ github.event.inputs.instance_type }}
-        TF_VAR_region: ${{ github.event.inputs.region }}
+      # Apply Terraform changes (auto-approve)
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        env:
+          TF_VAR_vpc_id: ${{ github.event.inputs.vpc_id }}
+          TF_VAR_s3_bucket_name: ${{ github.event.inputs.s3_bucket_name }}
+          TF_VAR_instance_type: ${{ github.event.inputs.instance_type }}
+          TF_VAR_region: ${{ github.event.inputs.region }}
